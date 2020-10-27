@@ -46,7 +46,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/post_btn"
+        android:id="@+id/upload_btn"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:text="@string/post"

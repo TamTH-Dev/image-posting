@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button uploaderButton = findViewById(R.id.uploader_btn);
+        Button uploaderButton = findViewById(R.id.uploader_activity_change_btn);
         uploaderButton.setOnClickListener(v -> navigateToImageUploader());
     }
 

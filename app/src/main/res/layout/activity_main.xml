@@ -19,7 +19,7 @@
         android:textSize="16sp"/>
 
     <Button
-        android:id="@+id/uploader_btn"
+        android:id="@+id/uploader_activity_change_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="@string/upload_image"

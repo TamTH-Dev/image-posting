@@ -14,11 +14,4 @@ public class ServerResponse {
     public String getMessage() {
         return this.message;
     }
-
-    /**
-     * @param message Message from server's response
-     */
-    private void setMessage(String message) {
-        this.message = message;
-    }
 }

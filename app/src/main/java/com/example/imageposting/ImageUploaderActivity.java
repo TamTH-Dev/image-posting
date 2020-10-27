@@ -19,9 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,8 +48,8 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
             startActivityForResult(Intent.createChooser(gallery, "Select Picture"), IMAGE_PICK_CODE);
         });
 
-        Button postBtn = findViewById(R.id.post_btn);
-        postBtn.setOnClickListener(v -> postImage(imageUri, bitmap));
+        Button uploadBtn = findViewById(R.id.upload_btn);
+        uploadBtn.setOnClickListener(v -> uploadImage(imageUri, bitmap));
     }
 
     @Override
@@ -111,16 +109,11 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
         return file;
     }
 
-    private void postImage(Uri imageUri, Bitmap bitmap) {
+    private void uploadImage(Uri imageUri, Bitmap bitmap) {
         Retrofit retrofit = NetworkClient.getRetrofit();
 
         String imageName = getImageName(imageUri);
         File image = convertBitmapToImage(imageName, bitmap);
-
-//        RequestBody postedImage = RequestBody.create(
-//                MediaType.parse(getContentResolver().getType(imageUri)),
-//                image
-//        );
 
         UploadRequestBody uploadRequestBody = new UploadRequestBody(image, "image", this);
         MultipartBody.Part part = MultipartBody.Part
