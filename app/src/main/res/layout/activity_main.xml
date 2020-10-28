@@ -9,10 +9,10 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/capture_btn"
+        android:id="@+id/record_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="@string/capture_image"
+        android:text="@string/record_screen"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_gravity="center_horizontal"
