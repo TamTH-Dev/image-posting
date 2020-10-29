@@ -110,7 +110,7 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
     }
 
     private void uploadImage(Uri imageUri, Bitmap bitmap) {
-        Retrofit retrofit = NetworkClient.getRetrofit();
+        Retrofit retrofit = NetworkClient.getRetrofit("image");
 
         String imageName = getImageName(imageUri);
         File image = convertBitmapToImage(imageName, bitmap);

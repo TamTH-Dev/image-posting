@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.SparseIntArray;
 import android.widget.Button;
 
 import com.google.android.material.snackbar.Snackbar;

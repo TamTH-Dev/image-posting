@@ -15,12 +15,21 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ScreenRecorder {
+import okhttp3.MultipartBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class ScreenRecorder implements UploadCallback {
     private final MediaProjectionManager projectionManager;
     private MediaProjection mediaProjection;
     private MediaProjectionCallback mediaProjectionCallback;
@@ -36,6 +45,7 @@ public class ScreenRecorder {
     private static final String TAG = "MainActivity";
     private final int mScreenDensity;
     private String videoUri;
+    private String recordedTime;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -105,9 +115,9 @@ public class ScreenRecorder {
 
     private void initRecorder() {
         try {
-            String time = new SimpleDateFormat("dd-MM-yyyy_hh_mm_ss", Locale.getDefault())
+            recordedTime = new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault())
                     .format(new Date());
-            videoUri = getVideoUri(time);
+            videoUri = getVideoUri();
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
@@ -127,10 +137,14 @@ public class ScreenRecorder {
         }
     }
 
-    private String getVideoUri(String time) {
+    private String getVideoUri() {
         return Environment
                 .getExternalStoragePublicDirectory(Environment
-                        .DIRECTORY_DOWNLOADS) + "/record_" + time + ".mp4";
+                        .DIRECTORY_DOWNLOADS) + File.separator + getVideoName();
+    }
+
+    private String getVideoName() {
+        return "record_" + recordedTime + ".mp4";
     }
 
     private class MediaProjectionCallback extends MediaProjection.Callback {
@@ -157,8 +171,42 @@ public class ScreenRecorder {
         if (mediaProjection != null) {
             mediaProjection.unregisterCallback(mediaProjectionCallback);
             mediaProjection.stop();
+            uploadVideo();
             mediaProjection = null;
         }
         Log.i(TAG, "MediaProjection Stopped");
+    }
+
+
+    private void uploadVideo() {
+        Retrofit retrofit = NetworkClient.getRetrofit("video");
+
+        File video = new File(videoUri);
+
+        UploadRequestBody uploadRequestBody = new UploadRequestBody(video, "video", this);
+        MultipartBody.Part part = MultipartBody.Part
+                .createFormData("video", getVideoName(), uploadRequestBody);
+
+        UploadAPIs uploadAPIs = retrofit.create(UploadAPIs.class);
+        uploadAPIs.uploadVideo(part).enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(@Nullable Call<ServerResponse> call, @Nullable Response<ServerResponse> response) {
+                assert response != null;
+                assert response.body() != null;
+
+                String res = response.body().getMessage();
+                Toast.makeText(activity, res, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@Nullable Call<ServerResponse> call, @Nullable Throwable t) {
+                assert t != null;
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void onProgressUpdate(int percentage) {
     }
 }

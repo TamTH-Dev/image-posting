@@ -10,4 +10,8 @@ public interface UploadAPIs {
     @Multipart
     @POST("upload-image")
     Call<ServerResponse> uploadImage(@Part MultipartBody.Part image);
+
+    @Multipart
+    @POST("upload-video")
+    Call<ServerResponse> uploadVideo(@Part MultipartBody.Part video);
 }
