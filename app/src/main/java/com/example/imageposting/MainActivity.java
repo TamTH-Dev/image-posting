@@ -11,13 +11,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS = 10;
-    private boolean isRecording;
     private ScreenRecorder screenRecorder;
 
     @Override
@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         screenRecorder = new ScreenRecorder(MainActivity.this, this);
-        isRecording = false;
 
         Button uploaderBtn = findViewById(R.id.uploader_activity_change_btn);
         uploaderBtn.setOnClickListener(v -> navigateToImageUploader());
@@ -55,8 +54,16 @@ public class MainActivity extends AppCompatActivity {
                             REQUEST_PERMISSIONS);
                 }
             } else {
-                isRecording = !isRecording;
-                screenRecorder.onToggleScreenShare(isRecording);
+                if (!screenRecorder.getIsRecording()) {
+                    screenRecorder.startRecord();
+                }
+            }
+        });
+
+        Button stopRecordBtn = findViewById(R.id.stop_record_btn);
+        stopRecordBtn.setOnClickListener(v -> {
+            if (screenRecorder.getIsRecording()) {
+                screenRecorder.stopRecord();
             }
         });
     }
@@ -85,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSIONS) {
             if ((grantResults.length > 0) && (grantResults[0] +
                     grantResults[1]) == PackageManager.PERMISSION_GRANTED) {
-                isRecording = !isRecording;
-                screenRecorder.onToggleScreenShare(isRecording);
+                if (!screenRecorder.getIsRecording()) {
+                    screenRecorder.startRecord();
+                }
             } else {
                 Snackbar.make(findViewById(android.R.id.content), "Permission",
                         Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",

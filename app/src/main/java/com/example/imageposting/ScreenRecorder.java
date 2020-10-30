@@ -33,7 +33,7 @@ public class ScreenRecorder implements UploadCallback {
     private final MediaProjectionManager projectionManager;
     private MediaProjection mediaProjection;
     private MediaProjectionCallback mediaProjectionCallback;
-    private final MediaRecorder mediaRecorder;
+    private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
 
     private final Activity activity;
@@ -58,7 +58,7 @@ public class ScreenRecorder implements UploadCallback {
         this.activity = activity;
         this.context = context;
 
-        this.mediaRecorder = new MediaRecorder();
+
         this.projectionManager = (MediaProjectionManager) context.getSystemService
                 (Context.MEDIA_PROJECTION_SERVICE);
 
@@ -83,12 +83,14 @@ public class ScreenRecorder implements UploadCallback {
         mediaRecorder.start();
     }
 
+    public void startRecord() {
+        this.mediaRecorder = new MediaRecorder();
+        initRecorder();
+        shareScreen();
+    }
 
-    public void onToggleScreenShare(boolean isRecording) {
-        if (isRecording) {
-            initRecorder();
-            shareScreen();
-        } else {
+    public void stopRecord() {
+        if (mediaRecorder != null) {
             mediaRecorder.stop();
             mediaRecorder.reset();
             Log.v(TAG, "Stopping Recording");
@@ -118,6 +120,8 @@ public class ScreenRecorder implements UploadCallback {
             recordedTime = new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault())
                     .format(new Date());
             videoUri = getVideoUri();
+
+            mediaRecorder.reset();
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
@@ -152,9 +156,9 @@ public class ScreenRecorder implements UploadCallback {
         public void onStop() {
             mediaRecorder.stop();
             mediaRecorder.reset();
+            Log.v(TAG, "Recording Stopped");
             mediaProjection = null;
             stopScreenSharing();
-            Log.v(TAG, "Recording Stopped");
         }
     }
 
@@ -171,8 +175,9 @@ public class ScreenRecorder implements UploadCallback {
         if (mediaProjection != null) {
             mediaProjection.unregisterCallback(mediaProjectionCallback);
             mediaProjection.stop();
-            uploadVideo();
             mediaProjection = null;
+            mediaRecorder = null;
+            uploadVideo();
         }
         Log.i(TAG, "MediaProjection Stopped");
     }
@@ -208,5 +213,9 @@ public class ScreenRecorder implements UploadCallback {
 
     @Override
     public void onProgressUpdate(int percentage) {
+    }
+
+    public boolean getIsRecording() {
+        return this.mediaRecorder != null;
     }
 }

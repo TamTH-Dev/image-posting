@@ -19,6 +19,16 @@
         android:textSize="16sp"/>
 
     <Button
+        android:id="@+id/stop_record_btn"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/stop_record_screen"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="16sp"/>
+
+    <Button
         android:id="@+id/uploader_activity_change_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
