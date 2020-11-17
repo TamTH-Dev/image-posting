@@ -1,6 +1,5 @@
 package com.example.imageposting;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -77,8 +75,6 @@ public class ScreenCapture implements UploadCallback {
                     rotate = 90;
                     break;
             }
-            Log.i("RotateImage", "Exif orientation: " + orientation);
-            Log.i("RotateImage", "Rotate value: " + rotate);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +88,6 @@ public class ScreenCapture implements UploadCallback {
                 matrix, true);
     }
 
-//    @SuppressLint("QueryPermissionsNeeded")
     public void takeImage() {
         Intent takeImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 

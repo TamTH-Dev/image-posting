@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
         progressBar = findViewById(R.id.progress_bar);
 
         imageView = findViewById(R.id.image_view);
+        imageView.setTag("Initial");
+
         imageView.setOnClickListener(v -> {
             Intent gallery = new Intent();
             gallery.setType("image/*");
@@ -51,7 +54,11 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
         });
 
         Button uploadBtn = findViewById(R.id.upload_btn);
-        uploadBtn.setOnClickListener(v -> uploadImage(imageUri, bitmap));
+        uploadBtn.setOnClickListener(v -> {
+            if (imageView.getTag().equals("Picked")) {
+                uploadImage(imageUri, bitmap);
+            }
+        });
     }
 
     @Override
@@ -65,6 +72,7 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
                 imageView.setBackground(null);
                 imageView.setImageDrawable(null);
                 imageView.setImageBitmap(bitmap);
+                imageView.setTag("Picked");
                 progressBar.setProgress(0);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -139,6 +147,7 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
                 Drawable backgroundPicture = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_picture, null);
                 imageView.setBackground(backgroundPicture);
                 imageView.setImageDrawable(backgroundPicture);
+                imageView.setTag("Initial");
             }
 
             @Override
