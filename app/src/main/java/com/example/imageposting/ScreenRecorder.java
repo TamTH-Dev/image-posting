@@ -38,8 +38,8 @@ public class ScreenRecorder implements UploadCallback {
 
     private final Activity activity;
     private final Context context;
+    private final int REQUEST_RECORD_CODE;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    private static final int REQUEST_CODE = 1000;
     private static final int DISPLAY_WIDTH = 720;
     private static final int DISPLAY_HEIGHT = 1280;
     private static final String TAG = "MainActivity";
@@ -54,10 +54,10 @@ public class ScreenRecorder implements UploadCallback {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    public ScreenRecorder(Activity activity, Context context) {
+    public ScreenRecorder(Activity activity, Context context, int REQUEST_RECORD_CODE) {
         this.activity = activity;
         this.context = context;
-
+        this.REQUEST_RECORD_CODE = REQUEST_RECORD_CODE;
 
         this.projectionManager = (MediaProjectionManager) context.getSystemService
                 (Context.MEDIA_PROJECTION_SERVICE);
@@ -66,16 +66,7 @@ public class ScreenRecorder implements UploadCallback {
         mScreenDensity = metrics.densityDpi;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != REQUEST_CODE) {
-            Log.e(TAG, "Unknown request code: " + requestCode);
-            return;
-        }
-        if (resultCode != Activity.RESULT_OK) {
-            Toast.makeText(context,
-                    "Screen Cast Permission Denied", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void onActivityResult(int resultCode, Intent data) {
         mediaProjectionCallback = new MediaProjectionCallback();
         mediaProjection = projectionManager.getMediaProjection(resultCode, data);
         mediaProjection.registerCallback(mediaProjectionCallback, null);
@@ -84,9 +75,11 @@ public class ScreenRecorder implements UploadCallback {
     }
 
     public void startRecord() {
-        this.mediaRecorder = new MediaRecorder();
-        initRecorder();
-        shareScreen();
+        if (mediaRecorder == null) {
+            this.mediaRecorder = new MediaRecorder();
+            initRecorder();
+            shareScreen();
+        }
     }
 
     public void stopRecord() {
@@ -100,7 +93,7 @@ public class ScreenRecorder implements UploadCallback {
 
     private void shareScreen() {
         if (mediaProjection == null) {
-            activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+            activity.startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_RECORD_CODE);
             return;
         }
         virtualDisplay = createVirtualDisplay();
@@ -120,8 +113,6 @@ public class ScreenRecorder implements UploadCallback {
             recordedTime = new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault())
                     .format(new Date());
             videoUri = getVideoUri();
-
-            mediaRecorder.reset();
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
@@ -144,7 +135,7 @@ public class ScreenRecorder implements UploadCallback {
     private String getVideoUri() {
         return Environment
                 .getExternalStoragePublicDirectory(Environment
-                        .DIRECTORY_DOWNLOADS) + File.separator + getVideoName();
+                        .DIRECTORY_PICTURES) + File.separator + getVideoName();
     }
 
     private String getVideoName() {

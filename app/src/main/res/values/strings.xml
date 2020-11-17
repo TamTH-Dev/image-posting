@@ -6,4 +6,5 @@
     <string name="post">Post</string>
     <string name="uploaded_image">Uploaded Image</string>
     <string name="stop_record_screen">Stop Record</string>
+    <string name="take_picture">Take a Picture</string>
 </resources>

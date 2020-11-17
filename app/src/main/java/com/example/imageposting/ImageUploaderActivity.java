@@ -2,9 +2,11 @@ package com.example.imageposting;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -60,6 +62,8 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
             imageUri = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                imageView.setBackground(null);
+                imageView.setImageDrawable(null);
                 imageView.setImageBitmap(bitmap);
                 progressBar.setProgress(0);
             } catch (Exception e) {
@@ -131,6 +135,10 @@ public class ImageUploaderActivity extends AppCompatActivity implements UploadCa
                 String res = response.body().getMessage();
                 Toast.makeText(ImageUploaderActivity.this, res, Toast.LENGTH_SHORT).show();
                 progressBar.setProgress(100);
+
+                Drawable backgroundPicture = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_picture, null);
+                imageView.setBackground(backgroundPicture);
+                imageView.setImageDrawable(backgroundPicture);
             }
 
             @Override

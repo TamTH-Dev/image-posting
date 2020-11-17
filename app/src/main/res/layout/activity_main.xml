@@ -4,39 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center_vertical"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/record_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="@string/record_screen"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="16sp"/>
+        android:text="@string/record_screen"
+        android:textSize="16sp" />
 
     <Button
-        android:id="@+id/stop_record_btn"
+        android:id="@+id/image_capture_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="@string/stop_record_screen"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="16sp"/>
+        android:layout_marginTop="30dp"
+        android:text="@string/take_picture"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/uploader_activity_change_btn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="@string/upload_image"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="16sp"/>
+        android:text="@string/upload_image"
+        android:textSize="16sp" />
 
 </LinearLayout>
