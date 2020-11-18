@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         screenRecorder = new ScreenRecorder(MainActivity.this, this, REQUEST_RECORD_CODE);
         screenCapture = new ScreenCapture(MainActivity.this, this, REQUEST_IMAGE_CAPTURE_CODE);
-        floatingWindow = new FloatingWindow(MainActivity.this, this, screenRecorder);
+//        floatingWindow = new FloatingWindow(MainActivity.this, this, screenRecorder);
 
         Button uploaderBtn = findViewById(R.id.uploader_activity_change_btn);
         uploaderBtn.setOnClickListener(v -> navigateToImageUploader());
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 if (!screenRecorder.getIsRecording()) {
-                    floatingWindow.addNewBubble();
+//                    floatingWindow.addNewBubble();
                     screenRecorder.startRecord();
                     if (Build.VERSION.SDK_INT >= 23) {
                         if (!Settings.canDrawOverlays(MainActivity.this)) {
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         screenRecorder.destroyMediaProjection();
-        floatingWindow.destroyFloatingWindow();
+//        floatingWindow.destroyFloatingWindow();
     }
 
     @Override

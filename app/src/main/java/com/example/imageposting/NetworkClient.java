@@ -8,9 +8,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkClient {
-    private static final String BASE_IMAGE_URL = "http://10.0.2.2:5000/";
+    //    private static final String BASE_IMAGE_URL = "http://10.0.2.2:5000/";
+    private static final String BASE_IMAGE_URL = "http://192.168.43.154:5000/";
+
     //    private static final String BASE_IMAGE_URL = "https://orders-detection.herokuapp.com/";
-    private static final String BASE_VIDEO_URL = "http://10.0.2.2:5001/";
+    private static final String BASE_VIDEO_URL = "http://192.168.43.154:5001/";
 
     public static Retrofit getRetrofit(String type) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
